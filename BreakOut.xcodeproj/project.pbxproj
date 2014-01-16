@@ -21,6 +21,9 @@
 		9E5A77F01888712200596F4A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5A77D21888712200596F4A /* UIKit.framework */; };
 		9E5A77F81888712200596F4A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E5A77F61888712200596F4A /* InfoPlist.strings */; };
 		9E5A77FA1888712200596F4A /* BreakOutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5A77F91888712200596F4A /* BreakOutTests.m */; };
+		9E5A78051888714400596F4A /* PaddleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5A78041888714400596F4A /* PaddleView.m */; };
+		9E5A78081888745600596F4A /* BallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5A78071888745600596F4A /* BallView.m */; };
+		9E5A780B18887EE200596F4A /* BlockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5A780A18887EE200596F4A /* BlockView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,12 @@
 		9E5A77F51888712200596F4A /* BreakOutTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BreakOutTests-Info.plist"; sourceTree = "<group>"; };
 		9E5A77F71888712200596F4A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9E5A77F91888712200596F4A /* BreakOutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BreakOutTests.m; sourceTree = "<group>"; };
+		9E5A78031888714400596F4A /* PaddleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaddleView.h; sourceTree = "<group>"; };
+		9E5A78041888714400596F4A /* PaddleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaddleView.m; sourceTree = "<group>"; };
+		9E5A78061888745600596F4A /* BallView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BallView.h; sourceTree = "<group>"; };
+		9E5A78071888745600596F4A /* BallView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BallView.m; sourceTree = "<group>"; };
+		9E5A780918887EE200596F4A /* BlockView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockView.h; sourceTree = "<group>"; };
+		9E5A780A18887EE200596F4A /* BlockView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,8 +124,14 @@
 				9E5A77DD1888712200596F4A /* AppDelegate.h */,
 				9E5A77DE1888712200596F4A /* AppDelegate.m */,
 				9E5A77E01888712200596F4A /* Main.storyboard */,
+				9E5A78031888714400596F4A /* PaddleView.h */,
+				9E5A78041888714400596F4A /* PaddleView.m */,
 				9E5A77E31888712200596F4A /* ViewController.h */,
 				9E5A77E41888712200596F4A /* ViewController.m */,
+				9E5A780918887EE200596F4A /* BlockView.h */,
+				9E5A780A18887EE200596F4A /* BlockView.m */,
+				9E5A78061888745600596F4A /* BallView.h */,
+				9E5A78071888745600596F4A /* BallView.m */,
 				9E5A77E61888712200596F4A /* Images.xcassets */,
 				9E5A77D51888712200596F4A /* Supporting Files */,
 			);
@@ -249,7 +264,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E5A780B18887EE200596F4A /* BlockView.m in Sources */,
+				9E5A78051888714400596F4A /* PaddleView.m in Sources */,
 				9E5A77E51888712200596F4A /* ViewController.m in Sources */,
+				9E5A78081888745600596F4A /* BallView.m in Sources */,
 				9E5A77DF1888712200596F4A /* AppDelegate.m in Sources */,
 				9E5A77DB1888712200596F4A /* main.m in Sources */,
 			);
