@@ -10,6 +10,7 @@
 
 @interface ViewController : UIViewController <UICollisionBehaviorDelegate>
 
+@property (nonatomic) NSInteger numberOfPlayers;
 
 
 @end
