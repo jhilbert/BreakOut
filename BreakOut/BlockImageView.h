@@ -10,6 +10,15 @@
 
 @interface BlockImageView : UIImageView
 
+{
+
+}
+
+@property NSInteger typeOfBlock;
 @property NSInteger value;
+@property NSInteger hitsToDestroy;
+
+-(void)setImageForBlock;
+-(void)takeAHit;
 
 @end

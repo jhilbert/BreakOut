@@ -8,11 +8,12 @@
 
 #import "BreakOut.h"
 #import "BlockImageView.h"
+#import "BallView.h"
 
 @implementation BreakOut
 
 {
- 
+    
 }
 
 //static NSInteger numberOfLifes;
@@ -44,160 +45,124 @@
     _numberOfPlayers = numberOfPlayers;
     _currentPlayer = 1;
     _blocks = [NSMutableArray alloc];
-    _player1Blocks = [NSMutableArray alloc];
-    _player2Blocks = [NSMutableArray alloc];
+    _player1Blocks = [[NSMutableArray alloc] init];
+    _player2Blocks = [[NSMutableArray alloc] init];
+    _extraballs = [[NSMutableArray alloc] init];
     _gameOver = NO;
     _blocks = [NSMutableArray array];
-
+    
     
 }
 
 - (NSMutableArray*)setGameForLevel:(NSInteger)level
 {
-    if ([self levelFinished])
+    if (_blocks.count == 0)
     {
-    
-    _blocks = [NSMutableArray array];
-    switch (level) {
-        case 1:
-            for (int y=1; y<2; y++)
-            {
-                for (int x=1; x<2; x++)
+        
+        _blocks = [NSMutableArray array];
+        switch (level) {
+            case 1:
+                for (int y=1; y<2; y++)
                 {
-                    BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
-                    newBlock.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Explode1.png"]];
-                    
-                    // load all the frames of our animation
-                    newBlock.animationImages = [NSArray arrayWithObjects:
-                                                [UIImage imageNamed:@"Explode1.png"],
-                                                [UIImage imageNamed:@"Explode2.png"],
-                                                [UIImage imageNamed:@"Explode3.png"],
-                                                [UIImage imageNamed:@"Explode4.png"],
-                                                [UIImage imageNamed:@"Explode5.png"],
-                                                [UIImage imageNamed:@"Explode6.png"],
-                                                [UIImage imageNamed:@"Explode7.png"], nil];
-                    
-                    // all frames will execute in 1.75 seconds
-                    newBlock.animationDuration = 0.5;
-                    // repeat the animation forever
-                    newBlock.animationRepeatCount = 1;
-
-                    [_blocks addObject:newBlock];
+                    for (int x=1; x<8; x++)
+                    {
+                        BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
+                        if ((x+y+arc4random_uniform(level)) % 6 == 0)
+                            newBlock.typeOfBlock = 4;
+                        else
+                            newBlock.typeOfBlock = 3;
+                        [newBlock setImageForBlock];
+                        [_blocks addObject:newBlock];
+                    }
                 }
-            }
-            break;
-        case 2:
-            for (int y=1; y<3; y++)
-            {
-                for (int x=1; x<3; x++)
+                break;
+            case 2:
+                for (int y=1; y<3; y++)
                 {
-                    BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
-                    newBlock.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Explode1.png"]];
-                    
-                    // load all the frames of our animation
-                    newBlock.animationImages = [NSArray arrayWithObjects:
-                                                [UIImage imageNamed:@"Explode1.png"],
-                                                [UIImage imageNamed:@"Explode2.png"],
-                                                [UIImage imageNamed:@"Explode3.png"],
-                                                [UIImage imageNamed:@"Explode4.png"],
-                                                [UIImage imageNamed:@"Explode5.png"],
-                                                [UIImage imageNamed:@"Explode6.png"],
-                                                [UIImage imageNamed:@"Explode7.png"], nil];
-                    
-                    // all frames will execute in 1.75 seconds
-                    newBlock.animationDuration = 0.5;
-                    // repeat the animation forever
-                    newBlock.animationRepeatCount = 1;
-                    
-                    [_blocks addObject:newBlock];
+                    for (int x=1; x<8; x++)
+                    {
+                        BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
+                        if ((x+y+arc4random_uniform(level)) % 6 == 0)
+                            newBlock.typeOfBlock = 4;
+                        else
+                            newBlock.typeOfBlock = 2;
+                        [newBlock setImageForBlock];
+                        [_blocks addObject:newBlock];
+                    }
                 }
-            }
-            break;
-        case 3:
-            for (int y=1; y<5; y++)
-            {
-                for (int x=1; x<8; x++)
+                break;
+            case 3:
+                for (int y=1; y<5; y++)
                 {
-                    BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
-                    newBlock.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Explode1.png"]];
-                    
-                    // load all the frames of our animation
-                    newBlock.animationImages = [NSArray arrayWithObjects:
-                                                [UIImage imageNamed:@"Explode1.png"],
-                                                [UIImage imageNamed:@"Explode2.png"],
-                                                [UIImage imageNamed:@"Explode3.png"],
-                                                [UIImage imageNamed:@"Explode4.png"],
-                                                [UIImage imageNamed:@"Explode5.png"],
-                                                [UIImage imageNamed:@"Explode6.png"],
-                                                [UIImage imageNamed:@"Explode7.png"], nil];
-                    
-                    // all frames will execute in 1.75 seconds
-                    newBlock.animationDuration = 0.5;
-                    // repeat the animation forever
-                    newBlock.animationRepeatCount = 1;
-                    
-                    [_blocks addObject:newBlock];
+                    for (int x=1; x<8; x++)
+                    {
+                        BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
+                        if ((x+y+arc4random_uniform(level)) % 6 == 0)
+                            newBlock.typeOfBlock = 4;
+                        else
+                            newBlock.typeOfBlock = 1;
+                        [newBlock setImageForBlock];
+                        [_blocks addObject:newBlock];
+                    }
                 }
-            }
-
-            break;
-            
-        default:
-            for (int y=1; y<(5+level-3); y++)
-            {
-                for (int x=1; x<8; x++)
+                
+                break;
+                
+            default:
+                for (int y=1; y<(5+level-3); y++)
                 {
-                    BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
-                    newBlock.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Explode1.png"]];
-                    
-                    // load all the frames of our animation
-                    newBlock.animationImages = [NSArray arrayWithObjects:
-                                                [UIImage imageNamed:@"Explode1.png"],
-                                                [UIImage imageNamed:@"Explode2.png"],
-                                                [UIImage imageNamed:@"Explode3.png"],
-                                                [UIImage imageNamed:@"Explode4.png"],
-                                                [UIImage imageNamed:@"Explode5.png"],
-                                                [UIImage imageNamed:@"Explode6.png"],
-                                                [UIImage imageNamed:@"Explode7.png"], nil];
-                    
-                    // all frames will execute in 1.75 seconds
-                    newBlock.animationDuration = 0.5;
-                    // repeat the animation forever
-                    newBlock.animationRepeatCount = 1;
-                    
-                    [_blocks addObject:newBlock];
+                    for (int x=1; x<8; x++)
+                    {
+                        BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
+                        newBlock.typeOfBlock = arc4random_uniform(4) + 1;
+                        [newBlock setImageForBlock];
+                        [_blocks addObject:newBlock];
+                    }
                 }
-            }
-           
-            
-            break;
-    }
-
-    }
-    else
-        if (_currentPlayer == 1) {
-            _blocks = _player1Blocks;
+                
+                
+                break;
         }
-        else{
-            _blocks = _player2Blocks;
-        }
-    
+        
+    }
+    //    else
+    //        if (_currentPlayer == 1) {
+    //            _blocks = _player1Blocks;
+    //        }
+    //        else{
+    //            _blocks = _player2Blocks;
+    //        }
+    //
     return _blocks;
 }
 
--(NSInteger)hitBlock:(BlockImageView*)block{
-    
-    [_blocks removeObject:block];
+-(NSInteger)hitBlock:(BlockImageView*)block
+{
     int hitValue = 0;
     
-    hitValue = 10;
-    if (_currentPlayer == 1)
+    if (block.hitsToDestroy > 1)
     {
-        _player1Score += hitValue;
+        [block takeAHit];
     }
     else
     {
-        _player2Score += hitValue;
+        [_blocks removeObject:block];
+        
+        hitValue = 10;
+        if (_currentPlayer == 1)
+        {
+            _player1Score += hitValue;
+        }
+        else
+        {
+            _player2Score += hitValue;
+        }
+        if (block.typeOfBlock == 4)
+        {
+            BallView *newBall = [[BallView alloc] initWithFrame:CGRectMake(block.frame.origin.x, block.frame.origin.y-20, 15.0, 15.0)];
+            newBall.backgroundColor = [UIColor orangeColor];
+            [_extraballs addObject:newBall];
+        }
     }
     return hitValue;
     
@@ -221,7 +186,7 @@
     }
 }
 
- 
+
 //    int lostBallValue = 50;
 //    if (_currentPlayer == 1)
 //    {
@@ -260,13 +225,15 @@
 
 - (void)flipPlayer
 {
-    if (_currentPlayer == 1)
+    if (_currentPlayer == 1 && _numberOfPlayers == 2)
     {
         _currentPlayer = 2;
+        _blocks = _player2Blocks;
     }
     else
     {
         _currentPlayer = 1;
+        _blocks = _player1Blocks;
     }
 }
 

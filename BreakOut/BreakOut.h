@@ -29,6 +29,7 @@
 @property (nonatomic) BOOL gameOver;
 @property (nonatomic) NSInteger numberOfLifes;
 
+@property (nonatomic) NSMutableArray *extraballs;
 
 - (void)initGameForPlayers:(NSInteger)numberOfPlayers;
 - (NSMutableArray*)setGameForLevel:(NSInteger)level;

@@ -81,7 +81,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eOu-MF-3Y1" customClass="BallView">
-                                <rect key="frame" x="150" y="276" width="19" height="17"/>
+                                <rect key="frame" x="152" y="276" width="15" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
@@ -158,6 +158,7 @@
                         <outlet property="currentLevelLabel" destination="rgo-L9-sF8" id="1tk-Db-i02"/>
                         <outlet property="gameOverButton" destination="sA4-b3-qAZ" id="AoH-Ss-jrB"/>
                         <outlet property="paddleView" destination="c55-yd-Eo6" id="5eT-6X-gxR"/>
+                        <outlet property="player2Textlabel" destination="y39-Ly-i2F" id="XFv-sn-Kct"/>
                         <outlet property="scorePlayer1Label" destination="DSY-wN-h6d" id="9mH-Le-fwO"/>
                         <outlet property="scorePlayer2Label" destination="t62-5m-sgU" id="8lp-uC-Mhh"/>
                         <outlet property="startButton" destination="DnD-wg-9NT" id="xtp-UZ-S7s"/>

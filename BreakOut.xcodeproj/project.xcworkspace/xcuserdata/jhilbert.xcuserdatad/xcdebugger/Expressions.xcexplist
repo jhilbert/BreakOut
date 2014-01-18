@@ -3,7 +3,13 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[ViewController restartGame]:ViewController.m">
+         contextName = "-[ViewController refreshScore]:ViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ViewController collisionBehavior:beganContactForItem:withItem:atPoint:]:ViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ViewController collisionBehavior:beganContactForItem:withBoundaryIdentifier:atPoint:]:ViewController.m">
          <PersistentStrings>
             <PersistentString
                value = "game.currentPlayer">
@@ -11,7 +17,26 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[ViewController refreshScore]:ViewController.m">
+         contextName = "-[ViewController setupLevel:]:ViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "game.blocks">
+            </PersistentString>
+            <PersistentString
+               value = "collisionBehavior.items.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ViewController restartGame]:ViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "game.currentPlayer">
+            </PersistentString>
+            <PersistentString
+               value = "collisionBehavior.items.count">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>
