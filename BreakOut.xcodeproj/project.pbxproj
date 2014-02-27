@@ -24,6 +24,8 @@
 		889B7D171889AC7200A2F70E /* PlayerLife20x5.png in Resources */ = {isa = PBXBuildFile; fileRef = 889B7D161889AC7200A2F70E /* PlayerLife20x5.png */; };
 		889B7D191889B82900A2F70E /* Start.png in Resources */ = {isa = PBXBuildFile; fileRef = 889B7D181889B82900A2F70E /* Start.png */; };
 		889B7D1B188AD6AB00A2F70E /* GameOver.png in Resources */ = {isa = PBXBuildFile; fileRef = 889B7D1A188AD6AB00A2F70E /* GameOver.png */; };
+		889B7D1E188AF77300A2F70E /* breakingSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 889B7D1D188AF77300A2F70E /* breakingSound.mp3 */; };
+		889B7D20188AFE5400A2F70E /* pong.wav in Resources */ = {isa = PBXBuildFile; fileRef = 889B7D1F188AFE5400A2F70E /* pong.wav */; };
 		9E5A77CF1888712200596F4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5A77CE1888712200596F4A /* Foundation.framework */; };
 		9E5A77D11888712200596F4A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5A77D01888712200596F4A /* CoreGraphics.framework */; };
 		9E5A77D31888712200596F4A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5A77D21888712200596F4A /* UIKit.framework */; };
@@ -74,6 +76,8 @@
 		889B7D161889AC7200A2F70E /* PlayerLife20x5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PlayerLife20x5.png; sourceTree = "<group>"; };
 		889B7D181889B82900A2F70E /* Start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Start.png; sourceTree = "<group>"; };
 		889B7D1A188AD6AB00A2F70E /* GameOver.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameOver.png; sourceTree = "<group>"; };
+		889B7D1D188AF77300A2F70E /* breakingSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = breakingSound.mp3; sourceTree = "<group>"; };
+		889B7D1F188AFE5400A2F70E /* pong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pong.wav; sourceTree = "<group>"; };
 		9E5A77CB1888712200596F4A /* BreakOut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreakOut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E5A77CE1888712200596F4A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9E5A77D01888712200596F4A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -146,6 +150,15 @@
 			name = images;
 			sourceTree = "<group>";
 		};
+		889B7D1C188AF76200A2F70E /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				889B7D1D188AF77300A2F70E /* breakingSound.mp3 */,
+				889B7D1F188AFE5400A2F70E /* pong.wav */,
+			);
+			name = sounds;
+			sourceTree = "<group>";
+		};
 		9E5A77C21888712200596F4A = {
 			isa = PBXGroup;
 			children = (
@@ -179,6 +192,7 @@
 		9E5A77D41888712200596F4A /* BreakOut */ = {
 			isa = PBXGroup;
 			children = (
+				889B7D1C188AF76200A2F70E /* sounds */,
 				889B7CF41888A0FC00A2F70E /* images */,
 				9E5A77DD1888712200596F4A /* AppDelegate.h */,
 				9E5A77DE1888712200596F4A /* AppDelegate.m */,
@@ -314,10 +328,12 @@
 				889B7CFE1888A11100A2F70E /* Explode3.png in Resources */,
 				889B7D171889AC7200A2F70E /* PlayerLife20x5.png in Resources */,
 				889B7D071888ACF600A2F70E /* Explode7.png in Resources */,
+				889B7D1E188AF77300A2F70E /* breakingSound.mp3 in Resources */,
 				889B7CFF1888A11100A2F70E /* Explode4.png in Resources */,
 				889B7D1B188AD6AB00A2F70E /* GameOver.png in Resources */,
 				889B7D151889ABA700A2F70E /* PlayerLife30x15.png in Resources */,
 				889B7CFC1888A11100A2F70E /* Explode1.png in Resources */,
+				889B7D20188AFE5400A2F70E /* pong.wav in Resources */,
 				9E5A77D91888712200596F4A /* InfoPlist.strings in Resources */,
 				889B7D191889B82900A2F70E /* Start.png in Resources */,
 				889B7D0F1889927900A2F70E /* PlayerLife.png in Resources */,

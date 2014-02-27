@@ -3,7 +3,7 @@
 //  BreakOut
 //
 //  Created by Josef Hilbert on 17.01.14.
-//  Copyright (c) 2014 Stephen Compton. All rights reserved.
+//  Copyright (c) 2014 Josef Hilbert. All rights reserved.
 //
 
 #import "BreakOut.h"
@@ -67,10 +67,7 @@
                     for (int x=1; x<8; x++)
                     {
                         BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
-                        if ((x+y+arc4random_uniform(level)) % 6 == 0)
-                            newBlock.typeOfBlock = 4;
-                        else
-                            newBlock.typeOfBlock = 3;
+                        newBlock.typeOfBlock = 3;
                         [newBlock setImageForBlock];
                         [_blocks addObject:newBlock];
                     }
@@ -82,10 +79,7 @@
                     for (int x=1; x<8; x++)
                     {
                         BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
-                        if ((x+y+arc4random_uniform(level)) % 6 == 0)
-                            newBlock.typeOfBlock = 4;
-                        else
-                            newBlock.typeOfBlock = 2;
+                        newBlock.typeOfBlock = 2;
                         [newBlock setImageForBlock];
                         [_blocks addObject:newBlock];
                     }
@@ -97,7 +91,7 @@
                     for (int x=1; x<8; x++)
                     {
                         BlockImageView *newBlock = [[BlockImageView alloc] initWithFrame: CGRectMake(20+(x*32), (50 +(y*25)), 30.0, 15.0)];
-                        if ((x+y+arc4random_uniform(level)) % 6 == 0)
+                        if ((x+y+arc4random_uniform(level)) % 10 == 0)
                             newBlock.typeOfBlock = 4;
                         else
                             newBlock.typeOfBlock = 1;
@@ -105,7 +99,6 @@
                         [_blocks addObject:newBlock];
                     }
                 }
-                
                 break;
                 
             default:
@@ -173,7 +166,7 @@
     if (_currentPlayer == 1)
     {
         _player1Lifes -= 1;
-        if (_player1Lifes == 0)
+        if (_player1Lifes == 0 && _numberOfPlayers == 2)
             _gameOver = YES;
         _player1Blocks = _blocks;
     }

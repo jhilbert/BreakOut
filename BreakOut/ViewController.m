@@ -2,8 +2,8 @@
 //  ViewController.m
 //  BreakOut
 //
-//  Created by Stephen Compton on 1/16/14.
-//  Copyright (c) 2014 Stephen Compton. All rights reserved.
+//  Created by Josef Hilbert on 1/16/14.
+//  Copyright (c) 2014 Josef Hilbert. All rights reserved.
 //
 
 #import "ViewController.h"
@@ -12,10 +12,12 @@
 #import "BlockView.h"
 #import "BlockImageView.h"
 #import "BreakOut.h"
+#include <AudioToolbox/AudioToolbox.h>
 
 @interface ViewController ()<UICollisionBehaviorDelegate>
 
 {
+    __weak IBOutlet UILabel *player1TextLabel;
     __weak IBOutlet UILabel *player2Textlabel;
     __weak IBOutlet UIButton *gameOverButton;
     __weak IBOutlet UIButton *startButton;
@@ -43,44 +45,49 @@
     NSInteger timer;
     
     NSTimer *myTimer;
+    
+    NSInteger iPhoneSizeOffset;
+    
+    CFURLRef        soundFileURLRef;
+    SystemSoundID   pongSound;
+    SystemSoundID   hitSound;
 }
-
+#define   IsIphone5     ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 @end
 
 @implementation ViewController
 
+-(BOOL)isPad
+{
+#ifdef UI_USER_INTERFACE_IDIOM
+    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+#endif
+    return NO;
+}
+
++(BOOL)hasRetinaDisplay
+{
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2)
+        return YES;
+    else
+        return NO;
+}
 
 - (IBAction)dragPaddle:(UIPanGestureRecognizer *)panGestureRecognizer {
-    
     paddleView.center = CGPointMake ([panGestureRecognizer locationInView:self.view].x, paddleView.center.y);
     [dynamicAnimator updateItemUsingCurrentState:paddleView];
-    
-    
 }
 
 
 - (IBAction)onStartGameButtonPressed:(id)sender
 {
-  
-       [dynamicAnimator removeBehavior:snapBall];
-       [dynamicAnimator updateItemUsingCurrentState:ballView];
-    
+    [dynamicAnimator removeBehavior:snapBall];
+    [dynamicAnimator updateItemUsingCurrentState:ballView];
     startButton.hidden =YES;
-//    timer=1;
-//    myTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
-//                                               target:self
-//                                             selector:@selector(resetBall)
-//                                             userInfo:nil
-//                                              repeats:YES];
-//    pushBehavior.pushDirection = CGVectorMake(0.5, 1.0);
-//    pushBehavior.magnitude = 0.15;
     pushBehavior.active = YES;
     [collisionBehavior addItem:ballView];
     [dynamicAnimator updateItemUsingCurrentState:ballView];
     [myTimer invalidate];
-    NSLog(@"dynamice animator %@", dynamicAnimator.behaviors);
-    NSLog(@"collisision  %@", collisionBehavior.items);
-    
 }
 
 - (IBAction)onGameOverButtonPressed:(id)sender {
@@ -94,21 +101,21 @@
         [self removeExtraball:game.extraballs[i]];
     }
     
-    
     [collisionBehavior removeItem:ballView];
-    
     snapBall = [[UISnapBehavior alloc] initWithItem:ballView snapToPoint:CGPointMake(160.0, 220)];
     [dynamicAnimator addBehavior:snapBall];
-    
     pushBehavior.active = NO;
     
-    if (game.blocks.count > 0)
+    if (_numberOfPlayers == 2)
     {
-        for (UIView *tempBlock in game.blocks)
+        if (game.blocks.count > 0)
         {
-            [tempBlock removeFromSuperview];
-            [collisionBehavior removeItem:tempBlock];
-            [blockDynamicBehavior removeItem:tempBlock];
+            for (UIView *tempBlock in game.blocks)
+            {
+                [tempBlock removeFromSuperview];
+                [collisionBehavior removeItem:tempBlock];
+                [blockDynamicBehavior removeItem:tempBlock];
+            }
         }
     }
 }
@@ -116,17 +123,16 @@
 - (void)setupLevel:(NSInteger)level
 {
     
-    
-    [game setGameForLevel:level];
-    
-    for (BlockImageView *newBlock in game.blocks)
+    if (game.blocks.count == 0 || _numberOfPlayers == 2)
     {
-        [gameBoard addSubview:newBlock];
-        NSLog(@"new Block %@",newBlock);
-        [collisionBehavior addItem: newBlock];
-        [blockDynamicBehavior addItem: newBlock];
+        [game setGameForLevel:level];
+        for (BlockImageView *newBlock in game.blocks)
+        {
+            [gameBoard addSubview:newBlock];
+            [collisionBehavior addItem: newBlock];
+            [blockDynamicBehavior addItem: newBlock];
+        }
     }
-    
 }
 
 - (void)restartGame
@@ -134,14 +140,12 @@
     gameOverButton.hidden = YES;
     startButton.hidden = NO;
     game = [BreakOut new];
-    //    [BreakOut setNumberOfLifes:3];
     
     [game initGameForPlayers:_numberOfPlayers];
     
     scorePlayer1Label.text = [NSString stringWithFormat:@"%i", game.player1Score];
     scorePlayer2Label.text = [NSString stringWithFormat:@"%i", game.player2Score];
     
-
     UIDynamicItemBehavior *paddleDynamicBehavior;
     
     dynamicAnimator = [[UIDynamicAnimator alloc] initWithReferenceView:gameBoard];
@@ -164,7 +168,6 @@
     
     [dynamicAnimator addBehavior:paddleDynamicBehavior];
     
-    
     blockDynamicBehavior = [[UIDynamicItemBehavior alloc] init];
     blockDynamicBehavior.allowsRotation = NO;
     blockDynamicBehavior.density = 10000.0;
@@ -178,7 +181,6 @@
     
     [dynamicAnimator addBehavior:ballDynamicBehavior];
     
-    
     [self setupLevel:(game.currentPlayer==1) ? game.player1Level : game.player2Level];
     [self refreshScore];
 }
@@ -188,9 +190,38 @@
     return YES;
 }
 
+-(void)adjustFrames:(NSArray*)framesToAdjust
+{
+    for (UIView *viewToAdjust in framesToAdjust)
+    {
+        viewToAdjust.center = CGPointMake(viewToAdjust.center.x, (viewToAdjust.center.y - iPhoneSizeOffset));
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (IsIphone5)
+    {
+        iPhoneSizeOffset = 0;
+    }
+    else
+    {
+        iPhoneSizeOffset = 88;
+    }
+    
+    NSMutableArray *framesToAdjust = [[NSMutableArray alloc] initWithObjects:player1TextLabel, player2Textlabel, scorePlayer1Label, scorePlayer2Label, startButton, nil];
+    [self adjustFrames:framesToAdjust];
+    
+    NSURL *soundURL   = [[NSBundle mainBundle] URLForResource: @"breakingSound" withExtension: @"mp3"];
+    soundFileURLRef = (CFURLRef)CFBridgingRetain(soundURL);
+    AudioServicesCreateSystemSoundID (soundFileURLRef, &hitSound);
+    
+    soundURL   = [[NSBundle mainBundle] URLForResource: @"pong" withExtension: @"wav"];
+    soundFileURLRef = (CFURLRef)CFBridgingRetain(soundURL);
+    AudioServicesCreateSystemSoundID (soundFileURLRef, &pongSound);
+    
     self.navigationController.navigationBarHidden =YES;
     ballStart = ballView.frame;
     
@@ -215,17 +246,18 @@
     }
     [startButton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Start.png"]]];
     [self restartGame];
-    
-    
 }
 
 
 -(BOOL)shouldStartAgain
 {
-    if (game.blocks.count == 0) {
+    if (game.blocks.count == 0)
+    {
         return YES;
-    }else
-    {return NO;
+    }
+    else
+    {
+        return NO;
     }
 }
 
@@ -234,29 +266,21 @@
 {
     if (p.y > 560)
     {
-        
+        AudioServicesPlaySystemSound (hitSound);
         [game lostBall];
-        
         [dynamicAnimator removeBehavior:snapBall];
         [dynamicAnimator updateItemUsingCurrentState:ballView];
         [self clearLevel];
-        
-        //       ballView.center = CGPointMake(160.0, self.view.center.y);
-        //       [dynamicAnimator updateItemUsingCurrentState:ballView];
         pushBehavior.active = NO;
-        
         ballView.frame = ballStart;
-        
-        //      snapBall = [[UISnapBehavior alloc] initWithItem:ballView snapToPoint:CGPointMake(160.0, 300)];
-        //      [dynamicAnimator addBehavior:snapBall];
-        
         startButton.hidden = NO;
-        
         [game flipPlayer];
         [self setupLevel:(game.currentPlayer==1) ? game.player1Level : game.player2Level];
-        
         [self refreshScore];
-        
+    }
+    else
+    {
+        AudioServicesPlaySystemSound(pongSound);
     }
 }
 
@@ -264,7 +288,6 @@
 {
     scorePlayer1Label.text = [NSString stringWithFormat:@"%i", game.player1Score];
     scorePlayer2Label.text = [NSString stringWithFormat:@"%i", game.player2Score];
-    
     
     if(game.currentPlayer ==1)
     {
@@ -311,34 +334,29 @@
         {
             life.hidden = YES;
         }
-        
     }
     
     if (game.gameOver)
     {
-        if (game.player1Lifes == 0)
+        if ((_numberOfPlayers == 1) || (_numberOfPlayers == 2 && game.player1Score == game.player2Score))
         {
-            if (_numberOfPlayers == 2)
-            {
-                [gameOverButton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"FPlayer2Wins.png"]]];
-        
-            }
-            else
-            {
-                [gameOverButton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"GameOver.png"]]];
-            }
+            [gameOverButton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"GameOver.png"]]];
         }
         else
         {
-            [gameOverButton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"FPlayer1Wins.png"]]];
+            if (game.player1Score < game.player2Score)
+            {
+                [gameOverButton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"FPlayer2Wins.png"]]];
+            }
+            else
+            {
+                [gameOverButton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"FPlayer1Wins.png"]]];
+            }
         }
-    
         [self clearLevel];
         gameOverButton.hidden = NO;
         startButton.hidden = YES;
     }
-    
-    
 }
 
 - (void)hitBlock:(id)item
@@ -347,24 +365,20 @@
     NSInteger currentNumberOfExtraBalls = game.extraballs.count;
     NSInteger hitValue;
     hitValue = [game hitBlock:item];
-    NSLog(@"item hit %@",item);
     
     if (hitValue > 0)
     {
-    [self refreshScore];
+        AudioServicesPlaySystemSound (pongSound);
+        //       AudioServicesPlaySystemSound (soundFileObject);
+        [self refreshScore];
     
-  //  [item removeFromSuperview];
-    [collisionBehavior removeItem:item];
-    [blockDynamicBehavior removeItem:item];
-    [dynamicAnimator updateItemUsingCurrentState:item];
-    
-    [((BlockImageView*)item) startAnimating];
-    //    [UIImageView animateWithDuration:0.5 animations:^{
-    //        ((BlockImageView*)item).alpha = 0;
-    //   }];
-    
-       [UIView animateWithDuration:0.5 animations:^{
-             ((BlockImageView*)item).alpha = 0;
+        [collisionBehavior removeItem:item];
+        [blockDynamicBehavior removeItem:item];
+        [dynamicAnimator updateItemUsingCurrentState:item];
+        
+        [((BlockImageView*)item) startAnimating];
+        [UIView animateWithDuration:0.5 animations:^{
+            ((BlockImageView*)item).alpha = 0;
         } completion:^(BOOL finished) {
             [item removeFromSuperview];
         }];
@@ -372,19 +386,16 @@
         {
             BallView *extraBall = [game.extraballs objectAtIndex:currentNumberOfExtraBalls];
             [self.view addSubview:extraBall];
-   //         pushBehavior.pushDirection = CGVectorMake(0.5, 1.0);
-   //         pushBehavior.magnitude = 0.1;
             pushBehavior.active = YES;
             [pushBehavior addItem:extraBall];
             [collisionBehavior addItem:extraBall];
             [dynamicAnimator updateItemUsingCurrentState:extraBall];
             [ballDynamicBehavior addItem:extraBall];
-
             myTimer = [NSTimer scheduledTimerWithTimeInterval:2
-                                                        target:self
+                                                       target:self
                                                      selector:@selector(timeToResetExtraball:)
-                                                        userInfo:extraBall
-                                                        repeats:NO];
+                                                     userInfo:extraBall
+                                                      repeats:NO];
         }
     }
 }
@@ -398,14 +409,12 @@
     [game.extraballs removeObject:localExtraball];
 }
 
--(void)timeToResetExtraball:(NSTimer*)timer
+-(void)timeToResetExtraball:(NSTimer*)t
 {
-        BallView *localExtraball = [timer userInfo];
+    BallView *localExtraball = [t userInfo];
     [self removeExtraball:localExtraball];
-        [myTimer invalidate];
+    [myTimer invalidate];
 }
-
-
 
 - (void)collisionBehavior:(UICollisionBehavior *)behavior beganContactForItem:(id<UIDynamicItem>)item1 withItem:(id<UIDynamicItem>)item2 atPoint:(CGPoint)p
 {
@@ -419,19 +428,16 @@
     
     if(game.levelFinished)
     {
-              [dynamicAnimator removeBehavior:snapBall];
+        [dynamicAnimator removeBehavior:snapBall];
         [dynamicAnimator updateItemUsingCurrentState:ballView];
         
-        // next Level
         pushBehavior.active = NO;
         [collisionBehavior removeItem:ballView];
         
-  
         [self clearLevel];
         startButton.hidden = NO;
         [self setupLevel:(game.currentPlayer==1) ? game.player1Level : game.player2Level];
     }
-    
 }
 
 @end

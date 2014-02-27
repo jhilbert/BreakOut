@@ -3,7 +3,7 @@
 //  BreakOut
 //
 //  Created by Josef Hilbert on 17.01.14.
-//  Copyright (c) 2014 Stephen Compton. All rights reserved.
+//  Copyright (c) 2014 Josef Hilbert. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
